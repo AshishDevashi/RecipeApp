@@ -1,17 +1,24 @@
 import { useNavigation, useTheme } from '@react-navigation/native';
 import React, { useState } from 'react'
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import AppText from '../../../components/Common/AppText';
 import { Formik } from 'formik';
 import AppInput from '../../../components/Common/AppInput';
 import AppButton from '../../../components/Common/AppButton';
+import { getAuth, signInWithEmailAndPassword } from '@react-native-firebase/auth';
+import { showToast } from '../../../utils/helper';
+import { collection, getFirestore } from '@react-native-firebase/firestore';
+import { setLogin } from '../../../store/reducers/authSlice';
+import { useDispatch } from 'react-redux';
+import { logUser } from '../../../services/Firebase/AuthServices';
 
 
 const initalState = {
-    email: '',
-    password: '',
+    email: 'ashish@gmail.com',
+    password: 'ashish123',
 }
 export default function Login() {
+    const dispatch = useDispatch();
     const { colors } = useTheme();
     const [loading, setIsLoading] = useState(false);
     const navigation = useNavigation<any>();
@@ -23,7 +30,7 @@ export default function Login() {
             </View>
             <Formik
                 initialValues={initalState}
-                onSubmit={values => { }}>
+                onSubmit={values => { logUser(values.email, values.password, dispatch, setIsLoading) }}>
                 {({ values, errors, touched, handleChange, handleSubmit, setFieldValue }) => (
                     <View style={styles.formContainer}>
                         <AppInput
@@ -78,7 +85,7 @@ export default function Login() {
             <View style={styles.footerContainer}>
                 <View style={styles.footerTextContainer}>
                     <AppText size='sm' weight='medium'>Don’t have an account? </AppText>
-                    <TouchableOpacity onPress={() => navigation.push('Login')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Register')}>
                         <AppText weight='medium' color='notification'>Sign up</AppText>
                     </TouchableOpacity>
                 </View>

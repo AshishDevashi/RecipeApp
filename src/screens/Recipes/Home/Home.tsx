@@ -1,14 +1,24 @@
+import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { Text, View } from 'react-native'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../../store'
+import { SafeAreaView, Text, View } from 'react-native'
+import AppText from '../../../components/Common/AppText';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function Home() {
-    const userData = useSelector((state: RootState) => state.auth.userData)
-    console.log({ userData });
+    const { colors } = useTheme();
     return (
-        <View>
-            <Text>Home</Text>
-        </View>
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={{ flex: 1, backgroundColor: colors.primary, }}>
+                <View style={{ height: 60, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, justifyContent: 'space-between' }}>
+                    <AppText size='xxl' weight='bold' color='white'>Recipes</AppText>
+                    <View>
+                        <Icon name='bell-badge-outline' size={25} color={'white'} />
+                    </View>
+                </View>
+                <View style={{ flex: 1, backgroundColor: colors.background, borderTopLeftRadius: 24, borderTopRightRadius: 24 }}>
+
+                </View>
+            </View>
+        </SafeAreaView>
     )
 }
