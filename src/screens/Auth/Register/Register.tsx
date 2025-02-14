@@ -5,7 +5,7 @@ import AppInput from '../../../components/Common/AppInput';
 import AppButton from '../../../components/Common/AppButton';
 import AppCheckBox from '../../../components/Common/AppCheckBox';
 import { Formik } from 'formik';
-import { useTheme } from '@react-navigation/native';
+import { useNavigation, useTheme } from '@react-navigation/native';
 
 const initalState = {
     name: '',
@@ -17,6 +17,7 @@ const initalState = {
 export default function Register() {
     const { colors } = useTheme(); ``
     const [loading, setIsLoading] = useState(false);
+    const navigation = useNavigation<any>();
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
             <View style={styles.headerContainer}>
@@ -100,7 +101,7 @@ export default function Register() {
             <View style={styles.footerContainer}>
                 <View style={styles.footerTextContainer}>
                     <AppText size='sm' weight='medium'>Already a member? </AppText>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.push('Login')}>
                         <AppText weight='medium' color='notification'>Sign In</AppText>
                     </TouchableOpacity>
                 </View>
