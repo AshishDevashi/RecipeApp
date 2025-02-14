@@ -1,6 +1,6 @@
 import { useTheme } from '@react-navigation/native';
 import React from 'react';
-import { TouchableOpacity, StyleSheet, ActivityIndicator, GestureResponderEvent } from 'react-native';
+import { TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import AppText from './AppText';
 
 // Define the props for the PrimaryButton component
@@ -21,7 +21,7 @@ const AppButton: React.FC<AppButtonProps> = ({ title, onPress, disabled = false,
             activeOpacity={0.7} // Slightly reduce opacity when pressed
         >
             {loading ? (
-                <ActivityIndicator color="#fff" />
+                <ActivityIndicator color="#fff" size={'large'} />
             ) : (
                 <AppText size='lg' weight='semiBold' color='white'>{title}</AppText>
             )}

@@ -6,6 +6,8 @@ import Login from '../screens/Auth/Login/Login';
 import Home from '../screens/Recipes/Home/Home';
 import { Appearance } from 'react-native';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
 const authScreens = [
     { name: 'Register', component: Register },
@@ -19,7 +21,7 @@ function RootNavigation() {
     const [isDarkMode, setDarkMode] = useState(Appearance.getColorScheme() === 'dark');
     const Stack = createNativeStackNavigator();
     const { light, dark } = AppTheme;
-    const isLogin = false;
+    const isLogin = useSelector((state: RootState) => state.auth.isLogin);
 
     useEffect(() => {
         const subscription = Appearance.addChangeListener(({ colorScheme }) => {
@@ -28,6 +30,7 @@ function RootNavigation() {
 
         return () => subscription.remove(); // Cleanup on unmount
     }, []);
+    console.log('is Login', isLogin);
     return (
         <NavigationContainer theme={isDarkMode ? dark : light}>
             <Stack.Navigator screenOptions={{ headerShown: false }}>

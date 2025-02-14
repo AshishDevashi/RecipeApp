@@ -6,18 +6,57 @@ import AppButton from '../../../components/Common/AppButton';
 import AppCheckBox from '../../../components/Common/AppCheckBox';
 import { Formik } from 'formik';
 import { useNavigation, useTheme } from '@react-navigation/native';
+import { getAuth, createUserWithEmailAndPassword } from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import { showToast } from '../../../utils/helper';
+import { useDispatch } from 'react-redux';
+import { setLogin } from '../../../store/reducers/authSlice';
 
 const initalState = {
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    terms: false,
+    name: 'ashish',
+    email: 'ashish@gmail.com',
+    password: 'ashish123',
+    confirmPassword: 'ashish123',
+    terms: true,
 }
 export default function Register() {
     const { colors } = useTheme(); ``
     const [loading, setIsLoading] = useState(false);
     const navigation = useNavigation<any>();
+    const dispatch = useDispatch();
+
+    const registerUser = async (name: string, email: string, password: string) => {
+        try {
+            setIsLoading(true);
+            const auth = getAuth();
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await firestore().collection('users').doc(userCredential.user.uid).set({
+                name: name,
+                email: email,
+                uid: userCredential.user.uid,
+            });
+            const dataToSave = {
+                name: name,
+                email: email,
+                uid: userCredential.user.uid,
+            }
+            dispatch(setLogin(dataToSave))
+        } catch (error: any) {
+            switch (error.code) {
+                case 'auth/email-already-in-use':
+                    showToast('error', 'The email address is already in use');
+                    break;
+                case 'auth/weak-password':
+                    showToast('error', 'The password is too weak.');
+                    break;
+                default:
+                    showToast('error', 'An error occurred. Please try again.');
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
             <View style={styles.headerContainer}>
@@ -26,7 +65,9 @@ export default function Register() {
             </View>
             <Formik
                 initialValues={initalState}
-                onSubmit={values => { }}>
+                onSubmit={values => {
+                    registerUser(values.name, values.email, values.password)
+                }}>
                 {({ values, errors, touched, handleChange, handleSubmit, setFieldValue }) => (
                     <View style={styles.formContainer}>
                         <AppInput
