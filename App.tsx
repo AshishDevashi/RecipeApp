@@ -1,11 +1,10 @@
-import { Text, View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import RootNavigation from "./src/navigation";
 
-function App(): React.JSX.Element {
+export default function App() {
   return (
-    <View style={{ backgroundColor: 'blue', flex: 1 }}>
-      <Text>AShish</Text>
-    </View>
+    <SafeAreaProvider>
+      <RootNavigation />
+    </SafeAreaProvider>
   );
 }
-
-export default App;
