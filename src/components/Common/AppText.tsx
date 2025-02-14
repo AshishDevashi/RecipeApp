@@ -9,7 +9,7 @@ interface AppTextProps {
     children: React.ReactNode;
     weight?: 'regular' | 'medium' | 'semiBold' | 'bold' | 'extraBold'
     color?: 'primary' | 'action' | 'notification' | 'background' | 'border' | 'card' | 'text' | 'black' | 'white' | 'default';
-    size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'default';
+    size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'default';
     isAnimated?: boolean;
     numberOfLines?: number;
 }
@@ -18,7 +18,7 @@ const AppText: React.FC<AppTextProps> = ({
     style,
     children,
     weight = 'regular',
-    color = 'default',
+    color = 'text',
     size = 'default',
     isAnimated = false,
     numberOfLines,
@@ -47,12 +47,12 @@ const AppText: React.FC<AppTextProps> = ({
         md: fontSize.md,
         lg: fontSize.lg,
         xl: fontSize.xlg,
-        xxlg: fontSize.xxlg,
+        xxl: fontSize.xxlg,
         default: 14,
     };
 
-    const textColor = colorMap[color] || colorMap.default;
-    const fontSizeValue = sizeMap[size] || sizeMap.default;
+    const textColor = colorMap[color]
+    const fontSizeValue = sizeMap[size]
 
     // Memoized styles
     const textStyles = useMemo(
