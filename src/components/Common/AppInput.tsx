@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from 'react';
-import { StyleProp, StyleSheet, TextInput, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, TextInput, TextInputProps, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import AppText from './AppText';
 import { getFontFamily } from '../../utils/helper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-interface AppInputProps {
+interface AppInputProps extends TextInputProps {
     label?: string;
     placeholder?: string;
     value?: string;
@@ -31,6 +31,7 @@ const AppInput: React.FC<AppInputProps> = ({
     isMobile = false,
     containerStyle,
     maxLength = 200,
+    ...textInputProps
 }) => {
     const [isActive, setIsActive] = useState(false);
     const [visibility, setVisibility] = useState(false);
@@ -53,7 +54,7 @@ const AppInput: React.FC<AppInputProps> = ({
                 {leftIcon && <View style={{ flex: 0.1 }}>{leftIcon}</View>}
                 <TextInput
                     placeholder={placeholder}
-                    placeholderTextColor={colors.border}
+                    placeholderTextColor={colors.text}
                     style={[styles.input, { color: colors.text }]}
                     value={value}
                     onChangeText={onChangeText}
@@ -62,6 +63,7 @@ const AppInput: React.FC<AppInputProps> = ({
                     secureTextEntry={isPassword ? visibility : false}
                     keyboardType={isMobile ? 'numeric' : 'default'}
                     maxLength={maxLength}
+                    {...textInputProps}
                 />
                 {rightIcon && <View style={{ marginRight: 15 }}>{rightIcon}</View>}
                 {isPassword && <TouchableOpacity onPress={() => setVisibility(!visibility)} activeOpacity={0.8} style={{ marginRight: 15 }}>

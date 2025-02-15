@@ -5,6 +5,7 @@ const authSlice = createSlice({
     initialState: {
         isLogin: false,
         userData: {},
+        isDarkMode: false,
     },
     reducers: {
         setLogout: (state) => {
@@ -15,9 +16,12 @@ const authSlice = createSlice({
             state.isLogin = true;
             state.userData = action.payload;
         },
+        setDarkMode: (state, action) => {
+            state.isDarkMode = action.payload;
+        }
     },
 });
 
 // export { CONSTANTS } = authSlice.actions;
-export const { setLogout, setLogin } = authSlice.actions;
+export const { setLogout, setLogin, setDarkMode } = authSlice.actions;
 export default authSlice.reducer;
