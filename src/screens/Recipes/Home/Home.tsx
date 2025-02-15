@@ -1,12 +1,14 @@
-import { useFocusEffect, useTheme } from '@react-navigation/native'
+import { useFocusEffect, useNavigation, useTheme } from '@react-navigation/native'
 import React, { useCallback, useState } from 'react'
-import { FlatList, Image, SafeAreaView, StyleSheet, View } from 'react-native'
+import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native'
 import AppText from '../../../components/Common/AppText';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { MEALDBAPI } from '../../../utils/constants';
 import EachDish from '../../../components/Recipe/EachDish';
+import { TouchableOpacity } from 'react-native';
 
 export default function Home() {
+    const navigation = useNavigation<any>();
     const [allMeals, setAllMeals] = useState([]);
     const { colors } = useTheme();
 
@@ -27,7 +29,9 @@ export default function Home() {
             <View style={[styles.container, { backgroundColor: colors.primary }]}>
                 <View style={styles.header}>
                     <AppText size='xxl' weight='bold' color='white'>Recipes</AppText>
-                    <Icon name='bell-badge-outline' size={25} color='white' />
+                    <TouchableOpacity onPress={() => navigation.navigate('Notification')}>
+                        <Icon name='bell-badge-outline' size={25} color='white' />
+                    </TouchableOpacity>
                 </View>
                 <View style={[styles.content, { backgroundColor: colors.background }]}>
                     <View style={styles.popularRecipesHeader}>

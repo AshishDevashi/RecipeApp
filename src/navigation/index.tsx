@@ -11,6 +11,7 @@ import Recipe from '../screens/Recipes';
 import { SheetProvider } from 'react-native-actions-sheet';
 import '../utils/sheet.ts'
 import { setDarkMode } from '../store/reducers/authSlice.ts';
+import notification from '../screens/Recipes/notification/notification.tsx';
 
 const authScreens = [
     { name: 'Register', component: Register },
@@ -18,6 +19,7 @@ const authScreens = [
 ];
 const shopScreens = [
     { name: 'Recipe', component: Recipe },
+    { name: 'Notification', component: notification },
 ];
 
 function RootNavigation() {
