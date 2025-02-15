@@ -29,6 +29,7 @@ function CustomActionSheet(props: SheetProps<'customActionSheet'>) {
             gestureEnabled={true}>
             <ScrollView
                 nestedScrollEnabled={true}
+                showsVerticalScrollIndicator={false}
                 onMomentumScrollEnd={() =>
                     actionSheetRef.current?.handleChildScrollEnd()
                 }

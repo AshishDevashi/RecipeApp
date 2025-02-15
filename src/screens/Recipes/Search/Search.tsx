@@ -1,30 +1,56 @@
 import React, { useCallback, useState } from 'react'
-import { FlatList, Image, SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, FlatList, Image, SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import AppText from '../../../components/Common/AppText'
-import { useFocusEffect, useTheme } from '@react-navigation/native';
-import { MEALDBAPI } from '../../../utils/constants';
+import { useFocusEffect, useNavigation, useTheme } from '@react-navigation/native';
+import { FALLBACKIMAGE, MEALDBAPI } from '../../../utils/constants';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import Feather from 'react-native-vector-icons/Feather';
 import { SheetManager } from 'react-native-actions-sheet';
 import FilterSheet from './FilterSheet';
 import AppInput from '../../../components/Common/AppInput';
 
+
 function Search() {
-    const [value, setValue] = useState('')
-    const [allCate, setAllCate] = useState([]);
+    const navigation = useNavigation<any>();
+    const [value, setValue] = useState('');
+    const [allCate, setAllCate] = useState<any[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [page, setPage] = useState(1);
+    const [totalData, setTotalData] = useState<number | null>(null);
+    const pageSize = 20;
+
     const { colors } = useTheme();
 
     const fetchData = async () => {
-        const response = await fetch(MEALDBAPI.LISTALLCATEGORIESAPI);
-        const data = await response.json();
-        setAllCate(data.categories);
+        if (loading || (totalData !== null && allCate.length >= totalData)) return;
+        setLoading(true);
+        try {
+            const response = await fetch(MEALDBAPI.LISTALLCATEGORIESAPI);
+            const data = await response.json();
+            if (data.categories) {
+                if (totalData === null) setTotalData(data.categories.length); // Set total items once
+                const start = (page - 1) * pageSize;
+                const paginatedData = data.categories.slice(start, start + pageSize);
+                setAllCate((prevData) => [...prevData, ...paginatedData]);
+            }
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+        setLoading(false);
     };
 
     useFocusEffect(
         useCallback(() => {
             fetchData();
-        }, [])
+        }, [page])
     );
+
+    const loadMore = () => {
+        if (!loading && allCate.length < (totalData || 0)) {
+            setPage((prevPage) => prevPage + 1);
+        }
+    };
+
     const handleSheet = () => {
         SheetManager.show('customActionSheet', {
             payload: {
@@ -33,29 +59,30 @@ function Search() {
             },
         });
     };
+
     const handleSearch = () => {
-        // Search Logic
-        console.log('Ashish')
+        // Search functionality
+        if (value.trim().length < 3) return;
+        navigation.navigate('RecipeList', { type: 'query', value: value.trim() });
     };
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={[styles.container, { backgroundColor: colors.primary }]}>
                 <View style={styles.header}>
-                    <AppText size='xxl' weight='bold' color='white'>Discover</AppText>
+                    <AppText size="xxl" weight="bold" color="white">Discover</AppText>
                     <TouchableOpacity onPress={handleSheet}>
-                        <Icon name='sliders' size={25} color='white' />
+                        <Icon name="sliders" size={25} color="white" />
                     </TouchableOpacity>
                 </View>
                 <View style={[styles.content, { backgroundColor: colors.background }]}>
                     <View>
                         <AppInput
-                            label='Search'
+                            label="Search"
                             value={value}
                             onChangeText={setValue}
-                            placeholder='Search recipe'
-                            leftIcon={
-                                <Feather name='search' size={20} color='white' style={{ marginTop: -4 }} />
-                            }
+                            placeholder="Search recipe"
+                            leftIcon={<Feather name="search" size={20} color={colors.text} style={{ marginTop: -4 }} />}
                             onSubmitEditing={handleSearch}
                         />
                     </View>
@@ -67,21 +94,30 @@ function Search() {
                         renderItem={({ item }) => <EachCategories data={item} />}
                         numColumns={3}
                         columnWrapperStyle={[styles.columnWrapper, { backgroundColor: colors.background }]}
+                        onEndReached={loadMore}
+                        onEndReachedThreshold={0.5} // Triggers when 50% from the end
+                        ListFooterComponent={() =>
+                            loading ? <ActivityIndicator size="large" color={colors.primary} /> : null
+                        }
+                        ListEmptyComponent={() =>
+                            !loading && <AppText size="lg" weight="bold" >No categories found.</AppText>
+                        }
+                        showsVerticalScrollIndicator={false}
                     />
                 </View>
             </View>
         </SafeAreaView>
-    )
+    );
 }
+
 
 export default Search
 
 const EachCategories = ({ data }: any) => {
-    const FALLBACKIMAGE = 'https://media.istockphoto.com/id/1452662817/vector/no-picture-available-placeholder-thumbnail-icon-illustration-design.jpg?s=612x612&w=0&k=20&c=bGI_FngX0iexE3EBANPw9nbXkrJJA4-dcEJhCrP8qMw=';
+    const navigation = useNavigation<any>();
     const { colors } = useTheme();
-
     return (
-        <TouchableOpacity style={[styles.dishContainer, { backgroundColor: colors.background }]}>
+        <TouchableOpacity style={[styles.dishContainer, { backgroundColor: colors.background }]} onPress={() => navigation.navigate('RecipeList', { type: 'categories', value: data?.strCategory })}>
             <Image
                 source={{ uri: data?.strCategoryThumb || FALLBACKIMAGE }}
                 style={styles.dishImage}

@@ -5,23 +5,21 @@ import AppText from '../../../components/Common/AppText';
 import { Formik } from 'formik';
 import AppInput from '../../../components/Common/AppInput';
 import AppButton from '../../../components/Common/AppButton';
-import { getAuth, signInWithEmailAndPassword } from '@react-native-firebase/auth';
-import { showToast } from '../../../utils/helper';
-import { collection, getFirestore } from '@react-native-firebase/firestore';
-import { setLogin } from '../../../store/reducers/authSlice';
 import { useDispatch } from 'react-redux';
 import { logUser } from '../../../services/Firebase/AuthServices';
+import { LoginSchema } from '../../../schema/validationSchema';
 
 
 const initalState = {
-    email: 'ashish@gmail.com',
-    password: 'ashish123',
+    email: '',
+    password: '',
 }
 export default function Login() {
     const dispatch = useDispatch();
     const { colors } = useTheme();
     const [loading, setIsLoading] = useState(false);
     const navigation = useNavigation<any>();
+
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
             <View style={styles.headerContainer}>
@@ -30,6 +28,7 @@ export default function Login() {
             </View>
             <Formik
                 initialValues={initalState}
+                validationSchema={LoginSchema}
                 onSubmit={values => { logUser(values.email, values.password, dispatch, setIsLoading) }}>
                 {({ values, errors, touched, handleChange, handleSubmit, setFieldValue }) => (
                     <View style={styles.formContainer}>

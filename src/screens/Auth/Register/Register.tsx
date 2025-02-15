@@ -8,14 +8,17 @@ import { Formik } from 'formik';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { registerUser } from '../../../services/Firebase/AuthServices';
+import { RegisterSchema } from '../../../schema/validationSchema';
 
 const initalState = {
-    name: 'ashish',
-    email: 'ashish@gmail.com',
-    password: 'ashish123',
-    confirmPassword: 'ashish123',
-    terms: true,
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    terms: false,
 }
+
+
 export default function Register() {
     const { colors } = useTheme(); ``
     const [loading, setIsLoading] = useState(false);
@@ -30,6 +33,7 @@ export default function Register() {
             </View>
             <Formik
                 initialValues={initalState}
+                validationSchema={RegisterSchema}
                 onSubmit={values => { registerUser(values.name, values.email, values.password, dispatch, setIsLoading) }}>
                 {({ values, errors, touched, handleChange, handleSubmit, setFieldValue }) => (
                     <View style={styles.formContainer}>

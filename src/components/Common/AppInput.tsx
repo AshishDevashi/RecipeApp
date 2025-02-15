@@ -60,7 +60,7 @@ const AppInput: React.FC<AppInputProps> = ({
                     onChangeText={onChangeText}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
-                    secureTextEntry={isPassword ? visibility : false}
+                    secureTextEntry={isPassword ? !visibility : false}
                     keyboardType={isMobile ? 'numeric' : 'default'}
                     maxLength={maxLength}
                     {...textInputProps}

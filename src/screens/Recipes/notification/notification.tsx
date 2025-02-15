@@ -7,7 +7,7 @@ import { RootState } from '../../../store';
 import EachDish from '../../../components/Recipe/EachDish';
 import Icon from 'react-native-vector-icons/Feather';
 
-function notification({ navigation }: any) {
+function Notification({ navigation }: any) {
     const userData: any = useSelector((state: RootState) => state.auth.userData);
     const { colors } = useTheme();
     const data = {
@@ -25,10 +25,8 @@ function notification({ navigation }: any) {
                     <View style={{ width: 30, height: 30 }} />
                 </View>
                 <View style={[styles.content, { backgroundColor: colors.background }]}>
-                    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
-                        <View style={{ marginTop: 30 }}>
-                            <EachDish data={data} />
-                        </View>
+                    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+                        <AppText size='xxl' color='white' style={{ textAlign: 'center' }}>No Notification</AppText>
                     </ScrollView>
                 </View>
             </View>
@@ -36,7 +34,7 @@ function notification({ navigation }: any) {
     )
 }
 
-export default notification;
+export default Notification;
 
 const styles = StyleSheet.create({
     safeArea: {

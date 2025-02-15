@@ -1,37 +1,35 @@
-import { useNavigation, useTheme } from "@react-navigation/native";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { useTheme } from "@react-navigation/native";
+import { Image, StyleSheet, View } from "react-native";
 import AppText from "../Common/AppText";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const EachDish = ({ data }: { data: any }) => {
-    const navigation = useNavigation<any>();
+const EachMyDish = ({ data }: { data: any }) => {
     const FALLBACKIMAGE = 'https://media.istockphoto.com/id/1452662817/vector/no-picture-available-placeholder-thumbnail-icon-illustration-design.jpg?s=612x612&w=0&k=20&c=bGI_FngX0iexE3EBANPw9nbXkrJJA4-dcEJhCrP8qMw=';
     const { colors } = useTheme();
-    const handlePress = () => {
-        navigation.navigate('RecipeDetails', { recipe: data });
-    };
     return (
-        <TouchableOpacity style={[styles.dishContainer, { backgroundColor: colors.background }]} onPress={handlePress}>
+        <View style={[styles.dishContainer, { backgroundColor: colors.background }]} >
             <Image
-                source={{ uri: data?.strMealThumb || FALLBACKIMAGE }}
+                source={{ uri: data?.image.uri || FALLBACKIMAGE }}
                 style={styles.dishImage}
             />
-            <AppText weight='bold' style={styles.dishTitle} numberOfLines={3}>{data?.strMeal}</AppText>
-            {data?.strCategory ? <View style={styles.dishCategory}>
+            <AppText weight='bold' style={styles.dishTitle} numberOfLines={3}>{data?.title}</AppText>
+            {data?.description ? <View style={styles.dishCategory}>
                 <Icon name='tag' size={15} color={colors.text} />
-                <AppText size='sm'>{data?.strCategory}</AppText>
+                <AppText size='sm'>{data?.description}</AppText>
             </View> : false}
-        </TouchableOpacity>
+            <AppText size='sm'>{data?.ingredients}</AppText>
+
+        </View>
     );
 };
 
-export default EachDish;
+export default EachMyDish;
 
 const styles = StyleSheet.create({
     dishContainer: {
         width: 165,
         padding: 16,
-        shadowColor: '#000',
+        shadowColor: '#fff',
         shadowOffset: {
             width: 0,
             height: 2,

@@ -2,13 +2,11 @@ import { useTheme } from '@react-navigation/native';
 import React from 'react';
 import { TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import AppText from './AppText';
-
-// Define the props for the PrimaryButton component
 interface AppButtonProps {
-    title: string; // Button text
-    onPress: (event: any) => void; // Function to call when the button is pressed
-    disabled?: boolean; // Whether the button is disabled
-    loading?: boolean; // Whether the button is in a loading state
+    title: string;
+    onPress: (event: any) => void;
+    disabled?: boolean;
+    loading?: boolean;
 }
 
 const AppButton: React.FC<AppButtonProps> = ({ title, onPress, disabled = false, loading = false }) => {
@@ -18,7 +16,7 @@ const AppButton: React.FC<AppButtonProps> = ({ title, onPress, disabled = false,
             style={[styles.button, { backgroundColor: colors.primary }, disabled && styles.disabledButton]}
             onPress={onPress}
             disabled={disabled || loading}
-            activeOpacity={0.7} // Slightly reduce opacity when pressed
+            activeOpacity={0.7}
         >
             {loading ? (
                 <ActivityIndicator color="#fff" size={'large'} />
@@ -36,14 +34,14 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: 'center',
         justifyContent: 'center',
-        elevation: 3, // Shadow for Android
-        shadowColor: '#000', // Shadow for iOS
+        elevation: 3,
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 3,
     },
     disabledButton: {
-        backgroundColor: '#A9A9A9', // Disabled color
+        backgroundColor: '#A9A9A9',
     },
 });
 

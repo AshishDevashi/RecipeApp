@@ -1,10 +1,12 @@
 import React, { useCallback, useState } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import AppText from '../../../components/Common/AppText'
-import { useFocusEffect, useTheme } from '@react-navigation/native'
+import { useFocusEffect, useNavigation, useTheme } from '@react-navigation/native'
 import { MEALDBAPI } from '../../../utils/constants';
 import AppButton from '../../../components/Common/AppButton';
+import { SheetManager } from 'react-native-actions-sheet';
 function FilterSheet() {
+    const navigation = useNavigation<any>();
     const [areas, setAreas] = useState([]);
     const [selectedBadges, setSelectedBadges] = useState<string[]>([]);
 
@@ -27,7 +29,8 @@ function FilterSheet() {
     };
 
     const handleFilterPress = () => {
-
+        SheetManager.hide('customActionSheet');
+        navigation.navigate('RecipeList', { type: 'area', value: selectedBadges[0] })
     };
 
     return (

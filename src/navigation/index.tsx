@@ -4,14 +4,17 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Register from '../screens/Auth/Register/Register';
 import Login from '../screens/Auth/Login/Login';
 import { Appearance } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import Recipe from '../screens/Recipes';
 import { SheetProvider } from 'react-native-actions-sheet';
-import '../utils/sheet.ts'
 import { setDarkMode } from '../store/reducers/authSlice.ts';
-import notification from '../screens/Recipes/notification/notification.tsx';
+import Notification from '../screens/Recipes/notification/notification.tsx';
+import RecipeList from '../screens/Recipes/Search/RecipeList.tsx';
+import RecipeDetails from '../screens/Recipes/RecipeDetails/RecipeDetails.tsx';
+import '../utils/sheet.ts'
+import Add from '../screens/Recipes/Add/Add.tsx';
 
 const authScreens = [
     { name: 'Register', component: Register },
@@ -19,7 +22,10 @@ const authScreens = [
 ];
 const shopScreens = [
     { name: 'Recipe', component: Recipe },
-    { name: 'Notification', component: notification },
+    { name: 'Notification', component: Notification },
+    { name: 'RecipeList', component: RecipeList },
+    { name: 'RecipeDetails', component: RecipeDetails },
+    { name: 'Add', component: Add },
 ];
 
 function RootNavigation() {
